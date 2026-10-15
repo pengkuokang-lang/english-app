@@ -194,7 +194,7 @@ const MODES={mix:'🎲 混合測驗(聽・讀・寫・文法)',listen:'👂 聽�
 function home(){Q=null;const wk=Object.keys(wrong),sg=k=>stat[k]||{t:0,c:0},pc=k=>sg(k).t?Math.round(sg(k).c/sg(k).t*100):0,cs=sg(LV),acc=pc(LV);
  $('#app').innerHTML=`<h1>📚 英語小教室</h1><div class="card"><div class="scope">${LN[LV]}・學習紀錄</div><div class="row"><span>累計作答 <b>${cs.t}</b> 題</span><span>正確率 <b>${acc}%</b></span><span>單字庫 <b>${pool().length}</b></span></div><div class="bar" style="margin-top:8px"><i style="width:${acc}%"></i></div></div>
  <div class="seg">${[['1','初級'],['2','中級'],['3','高級'],['12','初/中級'],['all','全部']].map(([v,t])=>`<button data-a="lv" data-v="${v}" class="${LV===v?'on':''}">${t}<span>${v==='all'?words.length:v==='12'?words.filter(x=>x.lv==='1'||x.lv==='2').length:words.filter(x=>x.lv===v).length}</span></button>`).join('')}</div><button data-a="rate" style="margin:0 8px 8px 0">🐢 語速:${Math.round(RATE*100)}%</button><button data-a="auto" style="margin-bottom:8px">${AUTO?'🔊 自動發音:開':'🔇 自動發音:關'}</button><div class="grid">${Object.entries(MODES).map(([k,v])=>`<button data-a="start" data-m="${k}" ${k==='wrong'?'style="grid-column:1/3"':''}>${v}${k==='wrong'?`<span class="mu"> ・目前 ${wk.length} 題</span>`:''}</button>`).join('')}</div>
- <p class="mu">答錯的題目會在本回合稍後再次出現;錯題在「錯題加強」中連續答對 2 次才會移出錯題本。</p>
+ <p class="mu">答錯的題目不會在同一回合重複出現,會記進錯題本並在下次測驗再練習;錯題在「錯題加強」中連續答對 2 次才會移出錯題本。</p>
  <div class="card"><details><summary>📐 基礎文法重點</summary>${LES2}</details>
  <details><summary>📝 錯題本(${wk.length})</summary>${wk.length?wk.map(k=>`<div class="row" style="border-bottom:1px solid var(--bd);padding:6px 0"><span>${k[0]==='g'?'':`<button data-a="sayw" data-w="${esc(k.split('|')[1])}" style="padding:2px 8px">🔊</button> `}${esc(lbl(k))}</span><span class="mu">錯 ${wrong[k].n} 次</span></div>`).join('')+'<button data-a="clear" style="margin-top:8px">清空錯題本</button>':'<p class="mu">目前沒有錯題 🎉</p>'}</details>
  <details><summary>⚙️ 匯入完整單字表</summary><p class="mu">貼上單字表(支援「編號/單字/中文」逐行格式,或每行「單字|中文」),即可用全部單字練習。</p><textarea id="imp" rows="6"></textarea><div class="grid" style="margin-top:8px"><button class="p" data-a="imp">匯入</button><button data-a="reset">還原內建</button></div><p id="impmsg" class="mu"></p></details><details><summary>🗑 清空紀錄</summary><p class="mu">「清空目前級別」只會清除上方所選級別的作答次數和正確率。「清空全部」會同時清除所有級別紀錄和錯題本。</p><div class="grid"><button data-a="clearstat">清空目前級別</button><button data-a="clearall">清空全部</button></div></details></div>`}
@@ -203,6 +203,7 @@ function start(m){let keys=[];const W=()=>shuffle(pool()).slice(0,10).map(w=>w.w
  else if(m==='gram')keys=shuffle(GR.map((_,i)=>'g|'+i)).slice(0,10);
  else if(m==='wrong'){keys=shuffle(Object.keys(wrong)).slice(0,10);if(!keys.length){alert('目前沒有錯題,先去做測驗吧!');return}}
  else keys=W().map(w=>m+'|'+w);
+ if(m!=='wrong'){keys=[...new Set(keys)];while(keys.length<10&&m!=='gram'){const k=(m==='mix'?'read':m)+'|'+pool()[Math.random()*pool().length|0].w;if(!keys.includes(k))keys.push(k)}const ex=shuffle(Object.keys(wrong)).filter(k=>!keys.includes(k)&&(m==='mix'||(m==='gram'?k[0]==='g':k.startsWith(m+'|')))).slice(0,3);keys=shuffle([...keys.slice(0,keys.length-ex.length),...ex])}
  Q={q:keys,total:keys.length,right:0,miss:[],m};next()}
 function next(){if(!Q.q.length)return done();cur=mk(Q.q.shift());if(!cur)return next();if(!cur.say&&cur.prompt===cur.key.split('|')[1])cur.say=cur.prompt;answered=false;
  const n=Q.total-Q.q.length;
@@ -214,7 +215,7 @@ function answer(v){if(answered)return;answered=true;const ok=v.trim().toLowerCas
  if(!cur.retry){const s=stat[LV]=stat[LV]||{t:0,c:0};s.t++;if(ok){s.c++;Q.right++}else Q.miss.push(cur.key)}
  const w=wrong[cur.key];
  if(ok&&w){w.s=(w.s||0)+1;if(w.s>=2)delete wrong[cur.key]}
- if(!ok){wrong[cur.key]={n:(w?w.n:0)+1,s:0};if(!cur.retry||(cur.tries||0)<2){Q.q.splice(Math.min(2,Q.q.length),0,cur.key)}}
+ if(!ok){wrong[cur.key]={n:(w?w.n:0)+1,s:0}}
  save();
  document.querySelectorAll('.opt[data-v]').forEach(b=>{b.disabled=true;if(b.dataset.v===cur.ans)b.classList.add('ok');else if(b.dataset.v===v)b.classList.add('ng')});
  const a=$('#ans');if(a){a.disabled=true;a.classList.add(ok?'ok':'ng')}
