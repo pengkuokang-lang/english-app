@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>英語小教室</title>
+<style>
+/* ===== 英語小教室 UI v4:日系清新 × 現代極簡 =====
+   70% 暖白/中性 · 20% 鼠尾草綠 · 10% 奶油黃 */
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap");
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light;
+--bg:#FAF8F3;--card:#FFFFFF;--tx:#2F3A36;--mu:#5F6B64;--bd:#E8E4DA;--line:#E1E7E1;
+--sage:#4F7F6B;--sage-d:#3F6A58;--sage-s:#EAF2EC;--sage-l:#CFE0D6;
+--cream:#F3E3B4;--cream-s:#FBF4DC;--cream-l:#EAD99C;--cream-d:#7A672B;
+--pr:#4F7F6B;--ok:#3F7A5F;--ng:#B0553F;--r:18px;
+--sh:0 1px 2px rgba(47,58,54,.05),0 8px 20px -12px rgba(47,58,54,.14)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 17px/1.7 "Nunito","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+main{max-width:560px;margin:0 auto;padding:28px 20px 56px;overflow-wrap:anywhere}
+#app{display:flex;flex-wrap:wrap;align-content:flex-start;column-gap:8px}
+#app>*{flex:0 0 100%;box-sizing:border-box;min-width:0}
+
+/* 標題 */
+h1{font-size:28px;line-height:1.2;font-weight:800;letter-spacing:.01em;margin:4px 0 22px}
+h1::after{content:"每天一點點,慢慢變厲害";display:block;margin-top:6px;font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--mu)}
+.mu{color:var(--mu);font-size:14px}
+
+/* 基礎元件 */
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:22px;margin:0 0 16px;box-shadow:var(--sh)}
+button{font:inherit;font-weight:600;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:14px;min-height:48px;padding:10px 16px;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .18s,background .18s,box-shadow .18s,transform .18s}
+button:active:not(:disabled){transform:translateY(1px)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid rgba(79,127,107,.35);outline-offset:2px}
+button.p{background:var(--sage);color:#fff;border-color:var(--sage);text-align:center;min-height:54px;font-size:17px;box-shadow:0 1px 2px rgba(63,106,88,.3)}
+button.p:hover{background:var(--sage-d);border-color:var(--sage-d)}
+input,textarea{font:inherit;width:100%;box-sizing:border-box;padding:12px 14px;color:var(--tx);background:#fff;border:1px solid var(--bd);border-radius:12px}
+.bar{height:8px;border-radius:99px;background:#EEF1EC;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--sage);border-radius:99px;transition:width .5s ease}
+
+/* 學習成果:重點突出正確率,無色塊 */
+h1+.card{padding:20px 22px 22px}
+h1+.card .row{display:flex;align-items:flex-end;justify-content:flex-start;gap:0}
+h1+.card .row span{flex:1;font-size:0;line-height:1;padding:0 14px;border-left:1px solid var(--bd)}
+h1+.card .row span:first-child{padding-left:0;border-left:0}
+h1+.card .row span::before{display:block;margin-bottom:10px;font-size:12.5px;font-weight:500;letter-spacing:.06em;color:var(--mu)}
+h1+.card .row span:nth-child(1)::before{content:"累計作答"}
+h1+.card .row span:nth-child(2)::before{content:"正確率"}
+h1+.card .row span:nth-child(3)::before{content:"單字庫"}
+h1+.card .row span::after{font-size:13px;color:var(--mu);margin-left:3px}
+h1+.card .row span:nth-child(1)::after{content:"題"}
+h1+.card .row span:nth-child(3)::after{content:"字"}
+h1+.card .row b{font-family:"Nunito",sans-serif;font-size:28px;font-weight:700;line-height:1;color:var(--tx)}
+h1+.card .row span:nth-child(2) b{font-size:42px;font-weight:800;color:var(--sage)}
+h1+.card .bar{margin:18px 0 0!important}
+
+/* 主要學習功能:統一白卡 + 細色條 */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid>button[data-m]:not(.p){position:relative;display:flex;align-items:center;min-height:76px;padding:16px 18px 16px 26px;font-size:16.5px;font-weight:600;line-height:1.35;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);box-shadow:var(--sh)}
+.grid>button[data-m]:not(.p)::before{content:"";position:absolute;left:11px;top:50%;width:4px;height:28px;margin-top:-14px;border-radius:99px;background:var(--bar,var(--sage-l))}
+.grid>button[data-m=mix]:not(.p){--bar:#4F7F6B;grid-column:1/-1;min-height:88px;font-size:18px;font-weight:700;background:var(--sage-s);border-color:var(--sage-l)}
+.grid>button[data-m=listen]:not(.p){--bar:#78A894}
+.grid>button[data-m=read]:not(.p){--bar:#9FC4B2}
+.grid>button[data-m=write]:not(.p){--bar:#E0C77F}
+.grid>button[data-m=gram]:not(.p){--bar:#8FA79B}
+.grid>button[data-m=wrong]:not(.p){--bar:#D9BF6A;min-height:68px;background:var(--cream-s);border-color:var(--cream-l)}
+.grid>button[data-m]:not(.p) .mu{font-size:13px;font-weight:500;color:var(--cream-d)}
+.grid>button[data-m]:not(.p):hover{border-color:var(--sage);transform:translateY(-1px);box-shadow:0 2px 4px rgba(47,58,54,.06),0 12px 24px -14px rgba(47,58,54,.22)}
+.grid>button[data-m=wrong]:not(.p):hover{border-color:#D9BF6A}
+
+/* 說明文字與設定(降低視覺權重) */
+#app>p.mu{order:5;margin:6px 2px 20px;line-height:1.7}
+#app>button[data-a=rate],#app>button[data-a=auto]{order:6;flex:0 0 auto;min-height:44px;margin:0 0 8px!important;padding:8px 16px;font-size:13.5px;font-weight:500;color:var(--mu);background:transparent;border-radius:99px}
+#app>button[data-a=rate]:hover,#app>button[data-a=auto]:hover{background:var(--card);color:var(--tx)}
+.card:has(>details){order:7;background:transparent;border:0;box-shadow:none;padding:0;margin:14px 0 0}
+.card:has(>details)::before{content:"設定與工具";display:block;margin-bottom:4px;font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--mu)}
+.card details{border-top:1px solid var(--bd);font-size:15.5px;line-height:1.8}
+.card details:last-of-type{border-bottom:1px solid var(--bd)}
+summary{min-height:48px;box-sizing:border-box;padding:12px 2px;font-size:15px;font-weight:500;color:var(--mu);cursor:pointer}
+details[open]>summary{color:var(--tx);font-weight:600}
+.card details h4{margin:16px 0 2px;font-size:15px;font-weight:700;color:var(--sage-d)}
+textarea{min-height:120px;font-size:15px}
+
+/* 答題介面 */
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#app>.row{margin:0 0 8px}
+.row>button[data-a=home]{min-height:44px;margin-left:-10px;padding:8px 12px;font-weight:500;color:var(--mu);background:transparent;border-color:transparent}
+#app>.bar{margin:6px 0 18px!important}
+.tag{display:inline-block;padding:2px 12px;font-size:12.5px;font-weight:600;letter-spacing:.05em;color:var(--sage-d);background:var(--sage-s);border:0;border-radius:99px}
+.q{margin:14px 0 8px;font-size:28px;font-weight:700;line-height:1.35;letter-spacing:.01em;word-break:break-word}
+.opt{display:block;width:100%;min-height:58px;margin-top:10px;padding:14px 18px;font-size:18px;font-weight:500;line-height:1.4;background:#fff;border:1.5px solid var(--line);border-radius:16px}
+.opt:hover:not(:disabled){border-color:var(--sage);background:#F6FAF7}
+.opt:disabled{opacity:1;color:var(--tx);cursor:default}
+.opt.ok{background:var(--sage-s);border-color:var(--sage)!important}
+.opt.ng{background:#FCEFEA;border-color:#D8A090!important}
+.opt.ok::after{content:"✓";float:right;font-weight:800;color:var(--ok)}
+.opt.ng::after{content:"✕";float:right;font-weight:800;color:var(--ng)}
+input.ok{background:var(--sage-s);border-color:var(--sage)!important}
+input.ng{background:#FCEFEA;border-color:#D8A090!important}
+button[data-a=sayv]{min-width:54px;padding:0;font-size:19px;text-align:center;background:#fff;border:1.5px solid var(--line);border-radius:16px}
+button[data-a=sayv]:hover{border-color:var(--sage);background:var(--sage-s)}
+button[data-a=say],button[data-a=say2]{min-height:44px;margin:6px 0 8px;padding:8px 18px;font-size:15px;color:var(--sage-d);background:var(--sage-s);border:0;border-radius:99px;text-align:center}
+button[data-a=say]:hover,button[data-a=say2]:hover{background:var(--sage-l)}
+#ans{margin:4px 0 12px;padding:16px;font-size:24px;font-weight:600;letter-spacing:.03em;text-align:center;border:1.5px solid var(--line);border-radius:16px}
+#ans:focus{border-color:var(--sage)}
+#fb{margin-top:20px;padding-top:18px;border-top:1px solid var(--bd)}
+#fb>p:first-child{margin:0 0 6px;font-size:20px;font-weight:700}
+#fb .p{width:100%;margin-top:14px!important}
+
+/* 動畫 */
+#app>*{animation:rise .3s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* 響應式 */
+@media(max-width:380px){main{padding:20px 14px 48px}h1{font-size:25px}.q{font-size:24px}.opt{font-size:16.5px;padding:12px 14px}.grid>button[data-m]:not(.p){font-size:15px;padding:14px 12px 14px 22px}h1+.card .row span{padding:0 10px}h1+.card .row span:nth-child(2) b{font-size:36px}}
+.seg{display:flex;gap:4px;padding:4px;margin:0 0 16px;background:#EFEBE1;border-radius:14px}
+.seg button{flex:1;min-height:44px;padding:8px 6px;text-align:center;font-size:15px;font-weight:600;color:var(--mu);background:transparent;border:0;border-radius:11px;box-shadow:none}
+.seg button.on{background:var(--card);color:var(--sage-d);box-shadow:0 1px 3px rgba(47,58,54,.12)}
+.seg button span{margin-left:5px;font-size:12px;font-weight:500;opacity:.75}
+@media(min-width:700px){main{padding-top:48px}}
+</style></head><body><main id="app"></main>
+<script>
+const BASE="apple|蘋果;banana|香蕉;bread|麵包;milk|牛奶;egg|蛋;rice|米飯;fish|魚;chicken|雞肉;cake|蛋糕;water|水;dog|狗;cat|貓;bird|鳥;horse|馬;rabbit|兔子;monkey|猴子;tiger|老虎;elephant|大象;cow|母牛;pig|豬;book|書;pen|筆;pencil|鉛筆;desk|書桌;chair|椅子;door|門;window|窗戶;clock|時鐘;bag|袋子;umbrella|雨傘;teacher|老師;student|學生;doctor|醫生;nurse|護士;farmer|農夫;driver|司機;singer|歌手;mother|母親;father|父親;brother|兄弟;sister|姐妹;uncle|叔叔;aunt|阿姨;grandfather|祖父;grandmother|祖母;red|紅色的;blue|藍色的;green|綠色的;yellow|黃色的;black|黑色的;white|白色的;big|大的;small|小的;tall|高的;short|矮的;fast|快的;slow|慢的;hot|熱的;cold|冷的;happy|快樂的;sad|悲傷的;angry|生氣的;tired|疲倦的;hungry|飢餓的;thirsty|口渴的;beautiful|美麗的;delicious|美味的;dangerous|危險的;run|跑;walk|走路;swim|游泳;sing|唱歌;dance|跳舞;read|閱讀;write|寫;eat|吃;drink|喝;sleep|睡覺;buy|買;sell|賣;climb|爬;jump|跳;cook|烹調;wash|洗;school|學校;library|圖書館;hospital|醫院;bank|銀行;park|公園;station|車站;restaurant|餐廳;kitchen|廚房;bedroom|臥室;bathroom|浴室;Monday|星期一;Tuesday|星期二;Wednesday|星期三;Thursday|星期四;Friday|星期五;Saturday|星期六;Sunday|星期日;spring|春天;summer|夏天;autumn|秋天;winter|冬天;sun|太陽;moon|月亮;star|星星;rain|雨;snow|雪;mountain|山;river|河;sea|海;tree|樹;flower|花;bicycle|腳踏車;train|火車;airplane|飛機;taxi|計程車;boat|小船";
+const MORE="a|一個;a few|幾個;a little|一點點;a lot|很多;able|能夠的;about|關於;above|在上面;afraid|害怕的;after|在…之後;afternoon|下午;again|再一次;age|年齡;ago|…以前;agree|同意;air|空氣;airport|機場;all|全部的;almost|幾乎;along|沿著;already|已經;also|也;always|總是;America|美國;American|美國的;and|和;animal|動物;another|另一個;answer|回答;any|任何一個;anyone|任何人;anything|任何事物;apartment|公寓;appear|出現;April|四月;arm|手臂;around|四處;arrive|到達;art|藝術;as|像…一樣;ask|詢問;at|在;August|八月;away|離開;baby|嬰兒;back|背部;bad|壞的;bakery|麵包店;ball|球;band|樂團;baseball|棒球;basket|籃子;basketball|籃球;bath|浴缸;be|是;beach|海灘;bear|熊;because|因為;become|變成;bed|床;bee|蜜蜂;beef|牛肉;before|在…之前;begin|開始;behind|在後面;believe|相信;bell|鈴;belong|屬於;below|在下面;belt|腰帶;beside|在旁邊;between|在…之間;birthday|生日;bite|咬;blackboard|黑板;blind|瞎的;block|積木;blow|吹;body|身體;bookstore|書店;bored|感到無聊的;boring|無聊的;born|出生的;borrow|借入;boss|老闆;both|兩者都;bottle|瓶子;bottom|底部;bowl|碗;box|盒子;boy|男孩;break|打破;breakfast|早餐;bridge|橋;bright|明亮的;bring|帶來;brown|棕色的;brush|刷子;build|建造;burn|燃燒;bus|公車;business|生意;businessman|商人;busy|忙碌的;but|但是;butter|奶油;by|被;call|呼叫;camera|照相機;camp|露營;can|能;candy|糖果;cap|帽子;car|汽車;card|卡片;care|照顧;careful|小心的;carry|攜帶;case|情況;catch|抓住;celebrate|慶祝;cell phone|手機;cent|分錢;center|中心;chalk|粉筆;chance|機會;change|改變;cheap|便宜的;cheat|欺騙;check|檢查;cheer|歡呼;cheese|乳酪;child|小孩;China|中國;Chinese|中國的;chocolate|巧克力;chopsticks|筷子;Christmas|聖誕節;church|教堂;circle|圓圈;city|城市;class|班級;classmate|同班同學;classroom|教室;clean|乾淨的;clear|清澈的;close|關閉;clothes|衣服;cloudy|多雲的;club|社團;coat|外套;coffee|咖啡;Coke|可樂;collect|收集;color|顏色;come|來;comfortable|舒適的;comic|喜劇的;common|常見的;computer|電腦;convenient|方便的;cookie|餅乾;cool|涼爽的;copy|副本;correct|正確的;cost|費用;couch|長沙發;count|計算;country|國家;cousin|表兄弟姐妹;cover|覆蓋;crazy|瘋狂的;cross|十字;cry|哭;cup|杯子;cut|切;cute|可愛的;dangerous|危險的;dark|黑暗的;date|日期;daughter|女兒;day|一天;dead|死的;dear|親愛的;December|十二月;decide|決定;department store|百貨公司;dictionary|字典;die|死亡;different|不同的;difficult|困難的;dig|挖;dining room|餐廳;dinner|晚餐;dirty|髒的;dish|盤子;do|做;doll|洋娃娃;dollar|元;down|向下;dozen|一打;draw|畫;dream|夢;dress|洋裝;drop|滴;dry|乾的;during|在…期間;each|每個;ear|耳朵;early|早的;earth|地球;east|東方;easy|容易的;eight|八;eighteen|十八;eighth|第八;eighty|八十;either|兩者之一;elementary school|小學;eleven|十一;else|其他的;e-mail|電子郵件;end|結束;English|英文;enjoy|享受;enough|足夠的;enter|進入;eraser|橡皮擦;eve|前夕;even|甚至;evening|傍晚;ever|曾經;every|每一;everyone|每個人;everything|一切;example|例子;excellent|優秀的;except|除了;excited|興奮的;exciting|令人興奮的;excuse|原諒;exercise|運動;expensive|昂貴的;experience|經驗;eye|眼睛;face|臉;fact|事實;factory|工廠;fall|落下;family|家庭;famous|有名的;fan|風扇;farm|農場;fat|胖的;favorite|最愛的;February|二月;feel|感覺;festival|節日;few|很少的;fifteen|十五;fifth|第五;fifty|五十;fill|裝滿;finally|最後;find|找到;fine|很好的;finger|手指;finish|完成;fire|火;first|第一;fisherman|漁夫;five|五;fix|修理;floor|地板;fly|飛;follow|跟隨;food|食物;foot|腳;for|為了;foreign|外國的;foreigner|外國人;forget|忘記;fork|叉子;forty|四十;four|四;fourteen|十四;fourth|第四;free|自由的;fresh|新鮮的;Friday|星期五;friend|朋友;friendly|友善的;from|從;front|前面;fruit|水果;full|滿的;fun|樂趣;funny|好笑的;future|未來;game|遊戲;garbage|垃圾;garden|花園;gas|瓦斯;get|得到;gift|禮物;girl|女孩;give|給;glad|高興的;glass|玻璃;glove|手套;go|去;goat|山羊;good|好的;good-bye|再見;grade|年級;grandpa|爺爺;grandma|奶奶;grass|草;gray|灰色的;great|很棒的;ground|地面;group|團體;grow|成長;guess|猜;habit|習慣;hair|頭髮;half|一半;ham|火腿;hamburger|漢堡;hand|手;handsome|英俊的;happen|發生;hard|硬的;hard-working|勤奮的;hat|帽子;hate|討厭;have|有;he|他;head|頭;headache|頭痛;health|健康;healthy|健康的;hear|聽見;heart|心臟;heat|加熱;heavy|重的;hello|哈囉;help|幫助;helpful|有幫助的;here|這裡;hi|嗨;hide|躲藏;high|高的;hill|小山;history|歷史;hit|打;hobby|嗜好;hold|握住;holiday|假日;home|家;homework|家庭作業;honest|誠實的;hope|希望;hospital|醫院;hot dog|熱狗;hotel|旅館;hour|小時;house|房子;how|如何;however|然而;hundred|一百;hurry|趕快;hurt|使受傷;husband|丈夫;I|我;ice|冰;ice cream|冰淇淋;idea|主意;if|如果;important|重要的;in|在…裡;inside|裡面;interest|興趣;interested|感興趣的;interesting|有趣的;Internet|網際網路;into|到…裡;island|島;it|它;jacket|夾克;January|一月;jeans|牛仔褲;job|工作;jog|慢跑;join|加入;joy|歡樂;juice|果汁;July|七月;June|六月;junior high school|國中;just|剛好;keep|保持;key|鑰匙;kick|踢;kid|小孩;kill|殺死;kilogram|公斤;kind|種類;king|國王;kiss|親吻;knee|膝蓋;knife|刀子;knock|敲;know|知道;knowledge|知識;lake|湖;lamp|檯燈;land|陸地;language|語言;large|大的;last|最後的;late|遲的;later|稍後;laugh|笑;lazy|懶惰的;lead|帶領;leader|領導者;learn|學習;least|最少的;leave|離開;left|左邊的;leg|腿;lemon|檸檬;lend|借出;less|較少的;lesson|課程;let|讓;letter|信;lie|躺;life|生命;light|光;like|喜歡;line|線;lion|獅子;lip|嘴唇;list|清單;listen|聽;little|小小的;live|居住;living room|客廳;lonely|孤獨的;long|長的;look|看;lose|失去;loud|大聲的;love|愛;low|低的;lucky|幸運的;lunch|午餐;machine|機器;magic|魔法;mail|郵件;mailman|郵差;make|製作;man|男人;many|許多;map|地圖;March|三月;mark|記號;market|市場;married|已婚的;math|數學;matter|事情;may|可能;May|五月;maybe|也許;meal|一餐;mean|吝嗇的;meat|肉;medicine|藥;medium|中等的;meet|遇見;meeting|會議;menu|菜單;mile|英里;million|百萬;mind|頭腦;minute|分鐘;Miss|小姐;miss|錯過;mistake|錯誤;modern|現代的;moment|片刻;money|錢;month|月份;more|更多的;morning|早晨;most|最多的;motorcycle|摩托車;mouse|老鼠;mouth|嘴巴;move|移動;movie|電影;much|很多的;museum|博物館;music|音樂;must|必須;name|名字;national|全國的;near|靠近的;neck|脖子;need|需要;never|從不;new|新的;news|新聞;next|下一個的;nice|好的;night|夜晚;nine|九;nineteen|十九;ninety|九十;ninth|第九;no|沒有;nobody|沒人;nod|點頭;noise|噪音;noodle|麵條;noon|正午;north|北方;nose|鼻子;not|不;notebook|筆記本;nothing|沒什麼;notice|公告;November|十一月;now|現在;number|數字;o'clock|…點鐘;October|十月;of|…的;off|離開;office|辦公室;officer|軍官;often|常常;oil|油;old|老的;on|在…上;once|一次;one|一;only|唯一的;open|打開的;or|或者;orange|柳橙;order|順序;other|其他的;out|在外;outside|外面;over|在…之上;own|自己的;pack|打包;package|包裹;page|頁;paint|油漆;pair|一雙;pants|褲子;paper|紙;parent|父母;part|部分;party|派對;pass|通過;past|過去的;pay|付錢;pen|原子筆;people|人們;perhaps|或許;person|人;pet|寵物;piano|鋼琴;pick|挑選;picnic|野餐;picture|圖畫;pie|派;piece|一片;pink|粉紅色;pizza|披薩;place|地方;plan|計畫;play|玩;player|玩家;playground|操場;please|請;point|尖端;police|警察;polite|有禮貌的;poor|貧窮的;popcorn|爆米花;popular|受歡迎的;pork|豬肉;possible|可能的;post office|郵局;postcard|明信片;pound|磅;practice|練習;prepare|準備;present|出席的;pretty|漂亮的;price|價格;problem|問題;program|節目;proud|驕傲的;public|公共的;pull|拉;purple|紫色;push|推;put|放;queen|女王;question|問題;quick|快速的;quiet|安靜的;quite|相當;radio|收音機;railway|鐵路;rainbow|彩虹;rainy|下雨的;ready|準備好的;real|真的;really|真地;refrigerator|冰箱;remember|記得;repeat|重複;rest|休息;restroom|廁所;rice|稻米;rich|有錢的;ride|騎;right|右邊的;ring|戒指;road|道路;room|房間;rose|玫瑰;round|圓的;rule|規則;ruler|尺;safe|安全的;salad|沙拉;sale|出售;salt|鹽;same|相同的;sandwich|三明治;save|拯救;say|說;season|季節;seat|座位;second|第二;see|看見;seldom|很少;send|寄送;senior high school|高中;sentence|句子;September|九月;serious|嚴重的;seven|七;seventeen|十七;seventh|第七;seventy|七十;several|幾個;shall|將會;shape|形狀;share|分享;she|她;sheep|綿羊;ship|大船;shirt|襯衫;shoe|鞋子;shop|商店;shopkeeper|店主;shoulder|肩膀;show|展示;shy|害羞的;sick|生病的;side|邊;sidewalk|人行道;simple|簡單的;since|自從;sir|先生;sit|坐;six|六;sixteen|十六;sixth|第六;sixty|六十;size|尺寸;skirt|裙子;sky|天空;smart|聰明的;smell|聞;smile|微笑;smoke|煙;snack|點心;snake|蛇;so|如此;sock|襪子;sofa|沙發;some|一些;someone|某人;something|某事;sometimes|有時候;somewhere|某處;son|兒子;song|歌曲;soon|很快;sorry|抱歉的;sound|聲音;soup|湯;south|南方;space|空間;speak|說話;special|特別的;spell|拼字;spend|花費;spoon|湯匙;sports|運動的;square|正方形;stand|站立;start|開始;stay|停留;steak|牛排;still|仍然;stomach|胃;stop|停止;store|儲存;story|故事;strange|奇怪的;stranger|陌生人;street|街道;strong|強壯的;study|研讀;stupid|愚蠢的;successful|成功的;sugar|糖;sunny|晴朗的;supermarket|超級市場;sure|確定的;surprise|驚喜;surprised|驚訝的;sweater|毛衣;sweet|甜的;table|桌子;Taiwan|臺灣;take|拿;talk|談話;tape|膠帶;taste|味道;tea|茶;teach|教;team|隊伍;teenager|青少年;telephone|電話;television|電視;tell|告訴;ten|十;tennis|網球;tenth|第十;test|測驗;than|比;thank|感謝;that|那個;the|這個;theater|劇院;then|那時;there|那裡;these|這些;they|他們;thin|瘦的;thing|東西;think|想;third|第三;thirteen|十三;thirty|三十;this|這個;those|那些;though|雖然;thousand|一千;three|三;ticket|票;time|時間;to|到;today|今天;together|一起;tomato|番茄;tomorrow|明天;tonight|今晚;too|太;tooth|牙齒;touch|碰觸;towel|毛巾;town|小鎮;toy|玩具;traffic|交通;trip|旅行;trouble|麻煩;truck|卡車;true|真實的;try|嘗試;turn|轉動;twelve|十二;twenty|二十;two|二;typhoon|颱風;under|在…下面;understand|了解;unhappy|不快樂的;uniform|制服;until|直到;up|向上;use|使用;useful|有用的;usually|通常;vacation|假期;vegetable|蔬菜;very|非常;video|錄影;visit|拜訪;voice|聲音;wait|等待;waiter|男服務生;waitress|女服務生;wake|醒來;wall|牆;want|想要;warm|溫暖的;watch|手錶;way|道路;we|我們;weak|虛弱的;wear|穿戴;weather|天氣;week|星期;weekend|週末;welcome|歡迎;well|很好地;west|西方;wet|濕的;what|什麼;when|何時;where|哪裡;whether|是否;which|哪一個;who|誰;whose|誰的;why|為什麼;wife|妻子;will|將會;win|獲勝;wind|風;windy|多風的;wise|有智慧的;wish|但願;with|和…一起;without|沒有;woman|女人;wonderful|極好的;word|單字;work|工作;workbook|習題本;worker|工人;world|世界;worry|擔心;writer|作家;wrong|錯誤的;year|年;yes|是的;yesterday|昨天;yet|還;you|你;young|年輕的;zoo|動物園";
+const ADVS="abroad|在國外;across|橫越;act|扮演;action|動作;actor|男演員;actress|女演員;ahead|在前面;ant|螞蟻;attack|攻擊;badminton|羽毛球;bake|烘烤;balcony|陽臺;barbecue|烤肉;base|基部;bat|球棒;bean|豆子;bench|長凳;blanket|毯子;boil|沸騰;bow|鞠躬;bug|小蟲;bun|小圓麵包;butterfly|蝴蝶;cage|籠子;candle|蠟燭;castle|城堡;centimeter|公分;chess|西洋棋;choose|選擇;clap|拍手;clerk|店員;cola|可樂;comb|梳子;corner|角落;course|課程;deal|處理;dentist|牙醫;dodge ball|躲避球;dot|圓點;dragon|龍;drawer|抽屜;drum|鼓;duck|鴨;dumpling|餃子;Easter|復活節;engineer|工程師;envelope|信封;fail|失敗;far|遠的;feed|餵養;fever|發燒;fight|打架;flute|橫笛;fox|狐狸;French fries|薯條;frisbee|飛盤;frog|青蛙;fry|油炸;gate|大門;ghost|鬼;giant|巨大的;glasses|眼鏡;glue|膠水;goose|鵝;gram|公克;grape|葡萄;guava|番石榴;guitar|吉他;guy|傢伙;gym|體育館;Halloween|萬聖節;hang|懸掛;hen|母雞;hey|嗨;hike|健行;hippo|河馬;honey|蜂蜜;hop|單足跳;housewife|家庭主婦;hunt|獵捕;inch|英吋;insect|昆蟲;interview|面談;invite|邀請;kangaroo|袋鼠;koala|無尾熊;lantern|燈籠;lawyer|律師;lovely|動人的;mad|發瘋的;marker|馬克筆;mask|面具;mat|墊子;mop|拖把;MRT|捷運;mud|泥巴;nail|釘子;nature|自然;neighbor|鄰居;newspaper|報紙;note|筆記;ox|公牛;papaya|木瓜;paste|黏貼;peach|桃子;pear|梨子;photo|照片;pin|大頭針;pipe|管子;planet|行星;plant|植物;plate|盤子;pleasure|愉快;pocket|口袋;pond|池塘;pool|水池;pot|鍋子;power|力量;pray|禱告;prince|王子;princess|公主;prize|獎品;pumpkin|南瓜;puppy|小狗;quarter|四分之一;quiz|小考;race|賽跑;raise|舉起;rat|老鼠;recorder|錄音機;reporter|記者;rise|升起;robot|機器人;rock|岩石;roll|捲;rope|粗繩;row|划船;sail|航行;salesman|售貨員;scared|害怕的;science|科學;scooter|小輪摩托車;screen|螢幕;secretary|秘書;seed|種子;seesaw|蹺蹺板;shake|搖動;shark|鯊魚;sharp|尖銳的;shine|照耀;shorts|短褲;shout|大叫;sight|視力;sign|記號;skate|溜冰;slide|滑梯;slim|纖細的;snowman|雪人;snowy|多雪的;soccer|足球;soldier|軍人;sore|疼痛的;spaghetti|義大利麵;spider|蜘蛛;stairs|樓梯;stamp|郵票;straight|直的;straw|吸管;strawberry|草莓;subject|學科;surf|衝浪;swing|鞦韆;tail|尾巴;temple|廟宇;terrible|可怕的;thick|厚的;throat|喉嚨;throw|投擲;tidy|整潔的;tie|領帶;toast|烤麵包;toe|腳趾;tool|工具;top|頂部;total|總共的;trash|垃圾;treat|對待;trick|詭計;T-shirt|T恤;tub|浴缸;turkey|火雞;turtle|烏龜;twice|兩次;type|類型;vest|背心;violin|小提琴;wallet|皮夾;watermelon|西瓜;wave|波浪;whale|鯨魚;yard|庭院;yummy|好吃的;zebra|斑馬;zero|零;absent|缺席的;accept|接受;accident|事故;active|活躍的;activity|活動;add|添加;address|地址;admire|欽佩;adult|成年人;advertisement|廣告;advice|忠告;affect|影響;against|反對;aim|目標;air conditioner|冷氣機;airlines|航空公司;alarm|警報;album|相簿;alike|相似的;alive|活著的;allow|允許;alone|單獨的;alphabet|字母;altogether|總共;ambulance|救護車;among|在…之中;amount|總數;ancient|古代的;angel|天使;anger|生氣;ankle|腳踝;anywhere|任何地方;apologize|道歉;appreciate|感謝;area|地區;argue|爭論;armchair|扶手椅;army|軍隊;arrange|整理;artist|藝術家;asleep|睡著的;assistant|助手;assume|假定;attention|注意;available|可用的;avoid|避免;baby sitter|保母;backpack|背包;backward|向後的;balloon|汽球;barber|理髮師;bark|狗叫;basement|地下室;basic|基本的;bathe|洗澡;beard|鬍子;beat|擊敗;beauty|美貌;beer|啤酒;beginner|新手;behave|舉止;besides|而且;beyond|超越;bill|帳單;biology|生物學;bitter|苦的;blame|歸咎;blank|空白;bless|祝福;blood|血;blouse|女襯衫;board|木板;bomb|炸彈;bone|骨頭;bookcase|書架;bother|煩擾;bowling|保齡球;branch|樹枝;brave|勇敢的;brick|磚塊;broad|寬廣的;broadcast|廣播;brunch|早午餐;bucket|水桶;buffet|自助餐;bundle|一捆;burger|漢堡肉餅;burst|爆開;button|鈕扣;cabbage|包心菜;cable|纜索;cafeteria|自助餐館;calendar|日曆;calm|寧靜的;campus|校園;cancel|取消;cancer|癌症;captain|隊長;careless|粗心的;carpet|地毯;carrot|胡蘿蔔;cartoon|卡通;cash|現金;cause|原因;ceiling|天花板;central|中央的;century|世紀;cereal|麥片;certain|肯定的;channel|頻道;character|特性;charge|索價;chart|圖表;chase|追趕;chemistry|化學;childhood|童年;childish|幼稚的;chin|下巴;choice|抉擇;chubby|圓胖的;classical|古典的;clever|聰明的;climate|氣候;closet|衣櫥;cloud|雲;coach|教練;coast|海岸;cockroach|蟑螂;coin|硬幣;college|學院;colorful|多彩的;command|命令;comment|評論;company|公司;compare|比較;complain|抱怨;complete|完整的;concern|關懷;confident|有信心的;confuse|使迷惑;congratulation|祝賀;consider|考慮;considerate|體諒的;contact lens|隱形眼鏡;continue|繼續;contract|合約;control|控制;convenience store|便利商店;conversation|會話;corn|玉米;cotton|棉花;cough|咳嗽;couple|一對;courage|勇氣;court|法庭;cowboy|牛仔;crab|螃蟹;crayon|蠟筆;cream|奶油;create|創造;credit card|信用卡;crime|犯罪;crowd|群眾;crowded|擁擠的;cruel|殘酷的;culture|文化;cure|治癒;curious|好奇的;current|現行的;curtain|窗簾;curve|曲線;custom|習俗;customer|顧客;daily|每日的;damage|損害;danger|危險;dawn|黎明;deaf|聾的;death|死亡;debate|辯論;decision|決定;decorate|佈置;decrease|減少;deep|深的;deer|鹿;degree|程度;deliver|遞送;department|部門;depend|依賴;describe|描述;desert|沙漠;design|設計;desire|渴望;dessert|甜點;detect|查出;develop|發展;dial|撥號;diamond|鑽石;diary|日記;diet|節食;difference|差別;difficulty|困難;diligent|勤勉的;dinosaur|恐龍;diplomat|外交官;direct|直接的;direction|方向;disappear|消失;discover|發現;discuss|討論;discussion|商討;dishonest|不誠實的;distance|距離;divide|分開;dizzy|暈眩的;dolphin|海豚;donkey|驢子;double|雙重的;doubt|懷疑;doughnut|甜甜圈;downstairs|樓下;downtown|市中心;drama|戲劇;dresser|衣櫃;drugstore|藥房;dumb|愚笨的;duty|義務;eagle|老鷹;earn|賺錢;earrings|耳環;ease|減輕;edge|邊緣;education|教育;effort|努力;elder|年長的;elect|選出;electric|電的;embarrass|使困窘;emotion|情緒;emphasize|強調;employ|僱用;empty|空的;enemy|敵人;energetic|精力充沛的;energy|能量;engine|引擎;entrance|入口;environment|環境;envy|羨慕;equal|相等的;error|錯誤;especially|特別地;event|事件;everywhere|處處;evil|邪惡的;exam|考試;excite|使興奮;exist|存在;exit|出口;expect|期待;explain|解釋;express|表達;extra|額外的;fair|公平的;false|假的;fancy|花俏的;fantastic|奇妙的;fashionable|時尚的;faucet|水龍頭;fault|過錯;fear|畏懼;fee|費用;female|女性的;fence|柵欄;film|影片;final|最終的;fit|合身;flag|旗子;flashlight|手電筒;flat tire|爆胎;flight|飛行;flour|麵粉;flu|流感;focus|集中;fog|霧;foggy|有霧的;fool|呆子;foolish|愚蠢的;football|美式足球;forest|森林;forgive|原諒;form|表格;formal|正式的;former|前者;forward|向前;frank|坦白的;freedom|自由;freezer|冷凍箱;freezing|極冷的;friendship|友誼;frighten|使害怕;furniture|傢俱;gain|得到;garage|車庫;gather|集合;general|普遍的;generous|慷慨的;genius|天才;gentle|溫柔的;gentleman|紳士;geography|地理;gesture|手勢;goal|球門;god|上帝;gold|黃金;golden|金色的;golf|高爾夫球;government|政府;granddaughter|孫女;grandson|孫子;greedy|貪心的;greet|問候;guard|警衛;guest|客人;guide|嚮導;gun|槍;haircut|理髮;hall|大廳;hammer|鎚子;handkerchief|手帕;handle|把手;hanger|衣架;heater|暖氣機;height|高度;helicopter|直昇機;hero|英雄;highway|公路;hip|臀部;hire|雇用;hole|洞;homesick|想家的;honesty|誠實;horrible|恐怖的;host|主人;housework|家務;hug|擁抱;human|人類;humble|謙虛的;humid|潮濕的;humor|幽默;humorous|幽默風趣的;hunger|饑餓;hunter|獵人;ignore|不理睬;ill|生病的;imagine|想像;impolite|沒禮貌的;importance|重要性;impossible|不可能的;improve|改善;include|包含;income|收入;increase|增加;independent|獨立的;indicate|指出;influence|影響力;information|資訊;ink|墨水;insist|堅持;inspire|鼓舞;instant|即時的;instrument|儀器;intelligent|有才智的;international|國際的;interrupt|打斷;introduce|介紹;invent|發明;invitation|邀請函;iron|熨斗;jam|果醬;jazz|爵士樂;jealous|嫉妒的;jeep|吉普車;joke|笑話;journalist|新聞工作者;judge|法官;ketchup|番茄醬;kilometer|公里;kindergarten|幼稚園;kingdom|王國;kitten|小貓;lack|缺乏;lady|淑女;lamb|小羊;latter|後者;law|法律;lay|放置;leaf|樹葉;level|水平;lick|舔;lift|抬起;lightning|閃電;likely|有可能的;limit|限度;link|連結;liquid|液體;liter|公升;loaf|一條麵包;local|當地的;lock|鎖;locker|置物櫃;loser|輸家;magazine|雜誌;magician|魔術師;main|主要的;major|主修;male|男性的;mall|購物中心;manager|經理;mango|芒果;manner|態度;marry|結婚;marvelous|了不起的;master|精通;match|相配;maximum|最大限度;measure|測量;mechanic|技工;member|會員;memory|記憶;men's room|男廁;message|訊息;metal|金屬;meter|公尺;method|方法;microwave|微波爐;middle|中間的;midnight|午夜;minor|較小的;minus|減;mirror|鏡子;mix|混合;model|模型;monster|怪物;mosquito|蚊子;motion|移動;movement|運動;musician|音樂家;napkin|餐巾;narrow|窄的;nation|國家;natural|天然的;naughty|頑皮的;necessary|必要的;necklace|項鍊;needle|針;negative|否定的;neither|兩者都不;nephew|侄子;nervous|緊張的;nest|巢;net|網子;niece|侄女;noisy|喧鬧的;none|毫無;nor|也不;novel|小說;nut|堅果;obey|服從;object|物件;ocean|海洋;offer|提供;oneself|自己;onion|洋蔥;operation|手術;opinion|意見;ordinary|平常的;oven|烤箱;overseas|國外的;overweight|過重的;owner|物主;pain|疼痛;painful|痛的;painter|畫家;pajamas|睡衣;pale|蒼白的;pan|平底鍋;panda|貓熊;pardon|寬恕;parking lot|停車場;parrot|鸚鵡;partner|夥伴;passenger|乘客;path|小徑;patient|病人;pattern|圖案;pause|中止;peace|和平;peaceful|寧靜的;pepper|胡椒;perfect|完美的;period|一段時間;personal|個人的;physics|物理;pigeon|鴿子;pile|一堆;pillow|枕頭;pineapple|鳳梨;plain|簡樸的;platform|月台;pleasant|愉快的;pleased|欣喜的;plus|加;poem|詩;poison|毒物;pollute|使污染;pollution|污染;pop music|流行音樂;population|人口;position|位置;positive|正面的;potato|馬鈴薯;powder|粉末;praise|讚美;precious|寶貴的;president|總統;pressure|壓力;priest|牧師;primary|初級的;principal|校長;principle|原則;print|印刷;printer|印表機;private|私人的;produce|製造;production|生產;professor|教授;progress|進步;project|計畫;promise|答應;pronounce|發音;protect|保護;provide|供應;punish|處罰;purpose|目的;purse|錢包;puzzle|謎題;quit|放棄;railroad|鐵路;raincoat|雨衣;rare|罕見的;rather|寧可;reach|伸手拿;realize|認知;reason|理由;receive|收到;record|記錄;recover|恢復;rectangle|長方形;recycle|回收;refuse|拒絕;regret|懊悔;regular|通常的;reject|駁回;relative|親戚;remind|提醒;rent|租;repair|修理;report|報告;respect|尊敬;responsible|負責任的;result|結果;return|歸還;review|溫習;revise|修訂;rob|搶劫;role|角色;roof|屋頂;root|根;rub|摩擦;rubber|橡膠;rude|無禮的;ruin|毀滅;rush|催促;safety|安全;sailor|水手;sample|樣品;sand|沙;satisfy|使滿意;saucer|淺碟;scarf|圍巾;scene|場面;scenery|風景;scientist|科學家;score|得分;seafood|海產;search|搜尋;secondary|次要的;secret|秘密;section|章節;seek|尋覓;seem|似乎;select|挑選;selfish|自私的;semester|學期;sense|感官;servant|僕人;serve|服侍;service|服務;sheet|床單;shelf|架子;shoot|射擊;shore|岸邊;shower|淋浴;shrimp|蝦子;shut|關閉;silence|寂靜;silent|安靜無聲的;silly|傻的;silver|銀;similar|類似的;sincere|誠懇的;single|單一的;sink|沉下;ski|滑雪;skill|技能;skillful|有技術的;skin|皮膚;skinny|很瘦的;sleepy|想睡的;slender|苗條的;slice|薄片;slippers|拖鞋;snail|蝸牛;sneakers|球鞋;sneaky|鬼鬼祟祟的;soap|肥皂;social|社會的;society|社會;soda|汽水;soft drink|冷飲;softball|壘球;solve|解決;soul|靈魂;sour|酸的;soy sauce|醬油;speaker|演講者;speech|演講;speed|速度;spirit|精神;spot|斑點;spread|展開;state|狀態;stationery|文具;steal|偷竊;steam|蒸氣;step|腳步;stingy|小氣的;stomachache|胃痛;stone|石頭;storm|暴風雨;stove|爐灶;stream|溪流;strike|罷工;style|風格;subway|地鐵;succeed|獲得成功;success|成就;such|如此的;suggest|建議;suit|西裝;super|超級的;supper|晚餐;support|支持;survive|倖存;swallow|吞嚥;swan|天鵝;sweep|掃地;swimsuit|泳衣;symbol|象徵;system|系統;table tennis|乒乓球;talent|天分;talkative|愛說話的;tangerine|橘子;tank|坦克;teapot|茶壺;tear|眼淚;temperature|溫度;tent|帳篷;term|術語;terrific|極好的;textbook|教科書;Thanksgiving|感恩節;therefore|因此;thief|小偷;through|經過;thumb|拇指;thunder|雷;tiny|微小的;tip|小費;title|標題;tofu|豆腐;toilet|馬桶;tongue|舌頭;toothache|牙痛;toothbrush|牙刷;topic|話題;toward|朝向;tower|塔;trace|蹤跡;trade|貿易;tradition|傳統;traditional|傳統的;trap|陷阱;travel|旅行;treasure|財寶;triangle|三角形;trousers|長褲;trumpet|小喇叭;trust|信任;truth|真相;tube|管狀物;tunnel|隧道;ugly|醜的;underline|底線;underpass|地下通道;underwear|內衣;unique|獨特的;universe|宇宙;university|綜合大學;upper|較高的;upstairs|樓上;usual|慣常的;Valentine|情人節;valley|山谷;valuable|有價值的;value|價值;vendor|小販;victory|勝利;village|村落;visitor|訪客;vocabulary|字彙;volleyball|排球;vote|投票;waist|腰;Walkman|隨身聽;war|戰爭;waste|浪費;waterfall|瀑布;weekday|平日;weight|重量;wheel|輪子;while|當…的時候;whole|完整的;wide|寬的;wild|野生的;wing|翅膀;winner|贏家;wolf|狼;women's room|女廁;wood|木材;worm|蠕蟲;wound|傷口;wrist|手腕;yell|吼叫;youth|青少年";
+const DEF=()=>{const s=new Set,a=parse((BASE+';'+MORE).replace(/;/g,'\n')).filter(x=>!s.has(x.w)&&s.add(x.w));a.forEach(x=>x.lv='1');return a.concat(parse(ADVS.replace(/;/g,'\n')).filter(x=>!s.has(x.w)&&s.add(x.w)).map(x=>(x.lv='2',x)))};
+const GR=[["She ___ a student.",["am","is","are"],1,"主詞是第三人稱單數(she/he/it)時,be 動詞用 is。"],
+["I ___ very happy today.",["am","is","are"],0,"I 搭配 am。"],
+["They ___ in the park.",["am","is","are"],2,"you / we / they 與複數主詞搭配 are。"],
+["I have ___ apple.",["a","an","the"],1,"apple 以母音音開頭,前面用 an。"],
+["He ___ to school every day.",["go","goes","going"],1,"現在簡單式,第三人稱單數動詞加 s/es(go→goes)。"],
+["She doesn't ___ milk.",["like","likes","liking"],0,"does not 後面要接原形動詞。"],
+["Look! The boy ___ now.",["swims","is swimming","swim"],1,"now 表示正在進行,用現在進行式 is + V-ing。"],
+["I ___ TV last night.",["watch","watched","watching"],1,"last night 表示過去,用過去式(規則動詞加 ed)。"],
+["There are three ___ on the table.",["box","boxs","boxes"],2,"以 x、s、ch、sh 結尾的名詞,複數加 es。"],
+["___ you like tea?",["Do","Does","Is"],0,"主詞是 you,一般動詞疑問句用 Do。"],
+["___ she like tea?",["Do","Does","Is"],1,"主詞是 she(第三人稱單數),用 Does。"],
+["This is ___ book. (我的)",["I","my","me"],1,"my 是所有格,放在名詞前表示「我的」。"],
+["Tom is taller ___ Jack.",["than","then","that"],0,"比較級後面用 than 表示「比…」。"],
+["He is the ___ boy in my class.",["tall","taller","tallest"],2,"有 the 且是在全班中比,用最高級 tallest。"],
+["My mother is ___ the kitchen.",["in","on","at"],0,"in 表示在空間「裡面」。"],
+["The cat is ___ the table. (在…下面)",["under","over","on"],0,"under = 在…下面。"],
+["He ___ breakfast yesterday.",["has","had","have"],1,"yesterday 是過去,have 的過去式是 had。"],
+["I get up ___ 6 o'clock.",["in","on","at"],2,"at 用於幾點鐘等時間點。"],
+["We have a test ___ Monday.",["in","on","at"],1,"星期、日期前用 on。"],
+["___ is he? He's my uncle.",["What","Who","Where"],1,"問「是誰」用 Who。"],
+["How ___ apples are there?",["much","many","any"],1,"apples 是可數名詞複數,用 how many。"]];
+const LES="<h4>1. be 動詞</h4>I am;he / she / it is;you / we / they are。<h4>2. 一般動詞</h4>第三人稱單數加 -s/-es(goes, has);否定與疑問用 do / does + 原形動詞。<h4>3. 現在進行式</h4>am / is / are + V-ing。<h4>4. 過去式</h4>規則動詞加 -ed(watched);不規則需背誦(go→went, have→had)。<h4>5. 名詞複數</h4>加 s;x/s/ch/sh 結尾加 es;子音+y 改 ies。<h4>6. a / an 與介系詞</h4>子音音前用 a,母音音前用 an;at + 時間點、on + 星期/日期、in + 月份/地點。<h4>7. 比較</h4>taller than(比較級)、the tallest(最高級)。";
+const GT=[['她是一位學生。','she(她)是「一個人」,所以 be 動詞(是)要用 is。口訣:I 用 am;he / she / it 用 is;you / we / they 用 are。'],
+['我今天很開心。','主詞是 I(我)時,be 動詞固定用 am。例:I am a boy.(我是男孩。)'],
+['他們在公園裡。','they(他們)是「很多人」,be 動詞用 are。we(我們)、you(你/你們)也用 are。'],
+['我有一顆蘋果。','apple 的第一個發音是母音(a、e、i、o、u 的音),前面要用 an;子音開頭用 a,例如 a book(一本書)。'],
+['他每天去上學。','he / she / it(一個人或一件事)當主詞時,動詞後面要加 s 或 es。go 加 es 變成 goes。every day 是「每天」。'],
+['她不喝牛奶。','doesn\'t = does not(不…)。does 後面的動詞要用「原本的樣子」,不能加 s,所以用 like,不是 likes。'],
+['看!那個男孩現在正在游泳。','Look!(看!)和 now(現在)表示「正在做」,要用 is + 動詞加 ing,也就是 is swimming。'],
+['我昨晚看了電視。','last night(昨晚)是過去的事,動詞要改成「過去式」。多數動詞在字尾加 ed:watch → watched。'],
+['桌上有三個盒子。','數量超過一個,名詞要變複數(多個)。box 結尾是 x,要加 es 變成 boxes。結尾是 s、x、ch、sh 時加 es。'],
+['你喜歡茶嗎?','主詞是 you(你)時,「一般動詞」(like、play、eat 等)的問句,開頭用 Do。'],
+['她喜歡茶嗎?','主詞是 she(一個人)時,問句開頭用 Does,後面的動詞用原本的樣子 like。'],
+['這是我的書。','my = 我的,要放在名詞(book)前面。I 是「我」(當主詞),me 是「把我」,都不能直接放在 book 前面。'],
+['湯姆比傑克高。','taller = 更高(tall 加 er,叫「比較級」,表示「更…」)。要說「比…」就用 than。then 是「然後」,that 是「那個」,意思不同。'],
+['他是我們班最高的男孩。','the … in my class(在班上最…)要用 tall 加 est,變成 tallest(最高)。表示「在一群人當中最…」。'],
+['我媽媽在廚房裡。','in = 在…裡面。人在廚房、房間「裡面」用 in。'],
+['貓在桌子下面。','under = 在…下面;over = 在…正上方;on = 在…上面(有碰到)。'],
+['他昨天吃了早餐。','yesterday(昨天)是過去,have / has 的過去式是 had。這是不規則變化,要直接背起來。'],
+['我六點起床。','「幾點鐘」前面用 at。at 6 o\'clock = 在六點鐘。'],
+['我們星期一有考試。','「星期幾」「幾月幾號」前面用 on。on Monday = 在星期一。'],
+['他是誰?他是我的叔叔。','Who = 誰、What = 什麼、Where = 哪裡。回答是人(my uncle),所以問 Who。'],
+['有幾顆蘋果?','apples(蘋果)可以一個一個數,問「多少個」用 how many。不能數的東西(例如水 water)才用 how much。']];
+const LES2="<p class='mu'>每個重點都附中文與例句,從上往下看就可以。</p><h4>1. be 動詞(是、在)</h4>I → am;he / she / it → is;you / we / they → are。<br>例:She is a student.(她是學生。)<h4>2. 一般動詞(做的動作:eat、go、like…)</h4>主詞是 he / she / it 時,動詞要加 s 或 es。<br>例:He goes to school.(他去上學。)<br>否定(不)與疑問(嗎)要用 do / does,後面的動詞用原本的樣子。<br>例:She doesn't like milk.(她不喝牛奶。)<h4>3. 現在進行式(正在做)</h4>am / is / are + 動詞加 ing。<br>例:He is swimming.(他正在游泳。)<h4>4. 過去式(以前做過)</h4>多數動詞加 ed:watch → watched(看了)。有些要特別背:go → went、have → had。<br>例:I watched TV last night.(我昨晚看了電視。)<h4>5. 名詞複數(不只一個)</h4>一般加 s:book → books;結尾是 s、x、ch、sh 加 es:box → boxes。<h4>6. a / an(一個)</h4>子音開頭用 a:a book;母音(a、e、i、o、u 的音)開頭用 an:an apple。<h4>7. at / on / in(時間與地點)</h4>at + 幾點(at 6 o'clock);on + 星期、日期(on Monday);in + 月份、房間(in the kitchen)。<h4>8. 比較級與最高級</h4>taller than = 比…更高;the tallest = 最高的。<br>例:Tom is taller than Jack.(湯姆比傑克高。)";
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const S={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const cl=(w,m)=>({w:w.replace(/\(.*?\)/g,'').trim(),m:m.replace(/\[.*?\]/g,'').replace(/^\(.*?\)\s*/,'').trim().slice(0,30)});
+function parse(t){const L=t.split(/\r?\n/).map(s=>s.trim()).filter(Boolean),r=[];
+ if(L.some(l=>/^\d+$/.test(l))){for(let i=0;i<L.length;i++)if(/^\d+$/.test(L[i])&&L[i+2]){r.push(cl(L[i+1],L[i+2]));i+=2}}
+ else L.forEach(l=>{const p=l.split(/[\t|]/);if(p[1])r.push(cl(p[0],p.slice(1).join(' ')))});
+ return r.filter(x=>x.w&&x.m)}
+let words=S.get('words',null)||DEF(),wrong=S.get('wrong',{}),stat=S.get('stat',{t:0,c:0}),Q=null,cur=null,answered=false,LV=S.get('lv','1');words.forEach(x=>x.lv=x.lv||'1');if(!words.some(x=>x.lv==='2'))words=words.concat(DEF().filter(x=>x.lv==='2'&&!words.some(y=>y.w===x.w)));const pool=()=>{const p=LV==='all'?words:words.filter(x=>x.lv===LV);return p.length>=4?p:words};
+const save=()=>{S.set('wrong',wrong);S.set('stat',stat)};
+let AUTO=S.get('auto',true),RATE=S.get('rate',.8);const spk=()=>cur.key[0]==='g'?GR[+cur.key.slice(2)][0].replace('___',cur.ans):cur.key.split('|')[1];const say=t=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=RATE;speechSynthesis.speak(u)}catch(e){}};
+function mk(key,retry){const [t,r]=key.split('|');
+ if(t==='g'){const g=GR[+r];const T=GT[+r]||['',g[3]],a=g[1][g[2]];return{key,label:'文法',prompt:g[0],tr:T[0],opts:shuffle(g[1]),ans:a,exp:`完整句子:${g[0].replace('___',a)}\n中文翻譯:${T[0]}\n\n💡 ${T[1]}`,retry}}
+ const w=words.find(x=>x.w===r);if(!w)return null;
+ const o=()=>shuffle([w,...shuffle(pool().filter(x=>x!==w&&x.m!==w.m&&x.w!==w.w)).slice(0,3)]);
+ const exp=`${w.w} = ${w.m}`;
+ if(t==='listen')return{key,label:'聽力',prompt:'🔊 聽發音,選出正確的中文意思',say:w.w,opts:o().map(x=>x.m),ans:w.m,exp,retry};
+ if(t==='read')return Math.random()<.5?{key,label:'閱讀',prompt:w.w,opts:o().map(x=>x.m),ans:w.m,exp,retry}:{key,label:'閱讀',prompt:`「${w.m}」的英文是?`,opts:o().map(x=>x.w),ans:w.w,exp,retry};
+ const d=Math.random()<.5;return{key,label:d?'聽寫':'拼寫',prompt:d?'🔊 聽發音,拼出這個單字':`拼出「${w.m}」的英文`,say:d?w.w:null,write:1,hint:w.w[0]+' '+'_ '.repeat(w.w.length-1)+`(${w.w.length} 個字母)`,ans:w.w,exp,retry}}
+const lbl=k=>{const[t,r]=k.split('|');if(t==='g')return GR[+r][0];const w=words.find(x=>x.w===r);return w?`${w.w} — ${w.m}`:r};
+const TN={listen:'聽力',read:'閱讀',write:'寫作',g:'文法'};
+const MODES={mix:'🎲 混合測驗(聽・讀・寫・文法)',listen:'👂 聽力',read:'📖 閱讀',write:'✍️ 寫作/聽寫',gram:'📐 基礎文法',wrong:'🔁 錯題加強'};
+function home(){Q=null;const wk=Object.keys(wrong),acc=stat.t?Math.round(stat.c/stat.t*100):0;
+ $('#app').innerHTML=`<h1>📚 英語小教室</h1><div class="card"><div class="row"><span>累計作答 <b>${stat.t}</b> 題</span><span>正確率 <b>${acc}%</b></span><span>單字庫 <b>${pool().length}</b></span></div><div class="bar" style="margin-top:8px"><i style="width:${acc}%"></i></div></div>
+ <div class="seg">${[['1','初級'],['2','進階'],['all','全部']].map(([v,t])=>`<button data-a="lv" data-v="${v}" class="${LV===v?'on':''}">${t}<span>${v==='all'?words.length:words.filter(x=>x.lv===v).length}</span></button>`).join('')}</div><button data-a="rate" style="margin:0 8px 8px 0">🐢 語速:${Math.round(RATE*100)}%</button><button data-a="auto" style="margin-bottom:8px">${AUTO?'🔊 自動發音:開':'🔇 自動發音:關'}</button><div class="grid">${Object.entries(MODES).map(([k,v])=>`<button data-a="start" data-m="${k}" ${k==='wrong'?'style="grid-column:1/3"':''}>${v}${k==='wrong'?`<span class="mu"> ・目前 ${wk.length} 題</span>`:''}</button>`).join('')}</div>
+ <p class="mu">答錯的題目會在本回合稍後再次出現;錯題在「錯題加強」中連續答對 2 次才會移出錯題本。</p>
+ <div class="card"><details><summary>📐 基礎文法重點</summary>${LES2}</details>
+ <details><summary>📝 錯題本(${wk.length})</summary>${wk.length?wk.map(k=>`<div class="row" style="border-bottom:1px solid var(--bd);padding:6px 0"><span>${k[0]==='g'?'':`<button data-a="sayw" data-w="${esc(k.split('|')[1])}" style="padding:2px 8px">🔊</button> `}${esc(lbl(k))}</span><span class="mu">錯 ${wrong[k].n} 次</span></div>`).join('')+'<button data-a="clear" style="margin-top:8px">清空錯題本</button>':'<p class="mu">目前沒有錯題 🎉</p>'}</details>
+ <details><summary>⚙️ 匯入完整單字表</summary><p class="mu">貼上單字表(支援「編號/單字/中文」逐行格式,或每行「單字|中文」),即可用全部單字練習。</p><textarea id="imp" rows="6"></textarea><div class="grid" style="margin-top:8px"><button class="p" data-a="imp">匯入</button><button data-a="reset">還原內建</button></div><p id="impmsg" class="mu"></p></details></div>`}
+function start(m){let keys=[];const W=()=>shuffle(pool()).slice(0,10).map(w=>w.w);
+ if(m==='mix')for(let i=0;i<10;i++){const t=['listen','read','write','g'][Math.random()*4|0];keys.push(t==='g'?'g|'+(Math.random()*GR.length|0):t+'|'+pool()[Math.random()*pool().length|0].w)}
+ else if(m==='gram')keys=shuffle(GR.map((_,i)=>'g|'+i)).slice(0,10);
+ else if(m==='wrong'){keys=shuffle(Object.keys(wrong)).slice(0,10);if(!keys.length){alert('目前沒有錯題,先去做測驗吧!');return}}
+ else keys=W().map(w=>m+'|'+w);
+ Q={q:keys,total:keys.length,right:0,miss:[],m};next()}
+function next(){if(!Q.q.length)return done();cur=mk(Q.q.shift());if(!cur)return next();if(!cur.say&&cur.prompt===cur.key.split('|')[1])cur.say=cur.prompt;answered=false;
+ const n=Q.total-Q.q.length;
+ $('#app').innerHTML=`<div class="row"><button data-a="home">← 返回</button><span class="mu">第 ${Math.min(n,Q.total)} / ${Q.total} 題・剩 ${Q.q.length+1}</span></div><div class="bar" style="margin:10px 0"><i style="width:${(Q.total-Q.q.length-1)/Q.total*100}%"></i></div>
+ <div class="card"><span class="tag">${cur.label}</span>${cur.retry?' <span class="tag">重做</span>':''}<div class="q">${esc(cur.prompt)}</div>${cur.tr?`<p class="mu">💡 中文:${esc(cur.tr)}</p>`:''}${cur.say?'<button data-a="say">🔊 再聽一次</button>':''}
+ ${cur.write?`<p class="mu">提示:${esc(cur.hint)}</p><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="輸入英文"><button class="p opt" data-a="submit">送出</button>`:cur.opts.map(o=>`<div style="display:flex;gap:6px;margin-top:8px"><button class="opt" style="margin:0;flex:1" data-a="opt" data-v="${esc(o)}">${esc(o)}</button>${/^[A-Za-z]/.test(o)?`<button data-a="sayv" data-v="${esc(o)}" title="聽發音">🔊</button>`:''}</div>`).join('')}<div id="fb"></div></div>`;
+ if(cur.say&&(AUTO||cur.key[0]==='l'||cur.write))say(cur.say);const a=$('#ans');if(a)a.focus()}
+function answer(v){if(answered)return;answered=true;const ok=v.trim().toLowerCase()===cur.ans.toLowerCase();
+ if(!cur.retry){stat.t++;if(ok){stat.c++;Q.right++}else Q.miss.push(cur.key)}
+ const w=wrong[cur.key];
+ if(ok&&w){w.s=(w.s||0)+1;if(w.s>=2)delete wrong[cur.key]}
+ if(!ok){wrong[cur.key]={n:(w?w.n:0)+1,s:0};if(!cur.retry||(cur.tries||0)<2){Q.q.splice(Math.min(2,Q.q.length),0,cur.key)}}
+ save();
+ document.querySelectorAll('.opt[data-v]').forEach(b=>{b.disabled=true;if(b.dataset.v===cur.ans)b.classList.add('ok');else if(b.dataset.v===v)b.classList.add('ng')});
+ const a=$('#ans');if(a){a.disabled=true;a.classList.add(ok?'ok':'ng')}
+ $('#fb').innerHTML=`<p style="color:var(${ok?'--ok':'--ng'})"><b>${ok?'✅ 答對了!':'❌ 答錯了,正確答案:'+esc(cur.ans)}</b></p><p class="mu" style="white-space:pre-line">${esc(cur.exp)}</p><button data-a="say2">🔊 ${cur.key[0]==='g'?'聽完整句子':'聽單字發音'}</button> <button class="p" data-a="next" style="width:100%;margin-top:8px">${Q.q.length?'下一題 →':'完成'}</button>`;
+ if(AUTO)say(spk())}
+function done(){const p=Math.round(Q.right/Q.total*100),ms=[...new Set(Q.miss)];
+ $('#app').innerHTML=`<h1>🎉 完成!</h1><div class="card"><div class="q">${Q.right} / ${Q.total}(${p}%)</div><p>${p>=90?'太棒了!':p>=60?'不錯喔,繼續加油!':'多練習幾次就會進步!'}</p>${ms.length?'<b>需要加強:</b>'+ms.map(k=>`<div class="mu">• ${esc(lbl(k))}</div>`).join(''):''}</div>
+ <div class="grid"><button class="p" data-a="start" data-m="${Q.m}">再來一回</button><button data-a="start" data-m="wrong">🔁 錯題加強</button><button data-a="home" style="grid-column:1/3;text-align:center">回首頁</button></div>`}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+ if(a==='start')start(b.dataset.m);else if(a==='opt')answer(b.dataset.v);else if(a==='submit')answer($('#ans').value);
+ else if(a==='next')next();else if(a==='home')home();else if(a==='say')say(cur.say);else if(a==='say2')say(spk());else if(a==='sayv')say(b.dataset.v);else if(a==='sayw')say(b.dataset.w);else if(a==='lv'){LV=b.dataset.v;S.set('lv',LV);home()}else if(a==='rate'){RATE=RATE<.7?.8:RATE<.9?1:.6;S.set('rate',RATE);b.textContent='🐢 語速:'+Math.round(RATE*100)+'%';say('Hello, nice to meet you')}else if(a==='auto'){AUTO=!AUTO;S.set('auto',AUTO);b.textContent=AUTO?'🔊 自動發音:開':'🔇 自動發音:關'}
+ else if(a==='clear'){if(confirm('確定清空錯題本?')){wrong={};save();home()}}
+ else if(a==='imp'){const r=parse($('#imp').value);if(r.length<10){$('#impmsg').textContent='解析失敗或單字少於 10 個,請檢查格式。';return}const L=LV==='2'?'2':'1';r.forEach(x=>x.lv=L);words=words.filter(x=>x.lv!==L).concat(r);S.set('words',words);wrong={};save();home()}
+ else if(a==='reset'){words=DEF();try{localStorage.removeItem('words')}catch(e){}wrong={};save();home()}});
+document.addEventListener('keydown',e=>{if(e.key!=='Enter'||!Q||!cur)return;if(answered)next();else if(cur.write)answer($('#ans').value)});
+home();
+</script></body></html>
