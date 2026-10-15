@@ -112,6 +112,11 @@ button[data-a=say]:hover,button[data-a=say2]:hover{background:var(--sage-l)}
 .seg button.on{background:var(--card);color:var(--sage-d);box-shadow:0 1px 3px rgba(47,58,54,.12)}
 .seg button span{display:block;margin:2px 0 0;font-size:12px;font-weight:500;opacity:.75}
 .seg button{font-size:14px;line-height:1.3;padding:8px 2px;min-height:52px}
+h1+.card .scope{margin:0 0 14px;font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--sage-d)}
+.lvs{margin-top:16px;padding-top:12px;border-top:1px solid var(--bd);font-size:13.5px}
+.lvs>div{display:grid;grid-template-columns:1fr auto 52px;gap:12px;padding:6px 8px;border-radius:8px;color:var(--mu)}
+.lvs>div.on{background:var(--sage-s);color:var(--tx);font-weight:600}
+.lvs>div span:nth-child(2),.lvs>div span:nth-child(3){text-align:right}
 @media(min-width:700px){main{padding-top:48px}}
 </style></head><body><main id="app"></main>
 <script>
@@ -172,8 +177,8 @@ function parse(t){const L=t.split(/\r?\n/).map(s=>s.trim()).filter(Boolean),r=[]
  if(L.some(l=>/^\d+$/.test(l))){for(let i=0;i<L.length;i++)if(/^\d+$/.test(L[i])&&L[i+2]){r.push(cl(L[i+1],L[i+2]));i+=2}}
  else L.forEach(l=>{const p=l.split(/[\t|]/);if(p[1])r.push(cl(p[0],p.slice(1).join(' ')))});
  return r.filter(x=>x.w&&x.m)}
-let words=S.get('words',null)||DEF(),wrong=S.get('wrong',{}),stat=S.get('stat',{t:0,c:0}),Q=null,cur=null,answered=false,LV=S.get('lv','1');words.forEach(x=>x.lv=x.lv||'1');if(!words.some(x=>x.lv==='2'))words=words.concat(DEF().filter(x=>x.lv==='2'&&!words.some(y=>y.w===x.w)));if(!words.some(x=>x.lv==='3'))words=words.concat(DEF().filter(x=>x.lv==='3'&&!words.some(y=>y.w===x.w)));const pool=()=>{const p=LV==='all'?words:LV==='12'?words.filter(x=>x.lv==='1'||x.lv==='2'):words.filter(x=>x.lv===LV);return p.length>=4?p:words};
-const save=()=>{S.set('wrong',wrong);S.set('stat',stat)};
+let words=S.get('words',null)||DEF(),wrong=S.get('wrong',{}),stat=S.get('stat2',{}),Q=null,cur=null,answered=false,LV=S.get('lv','1');words.forEach(x=>x.lv=x.lv||'1');if(!words.some(x=>x.lv==='2'))words=words.concat(DEF().filter(x=>x.lv==='2'&&!words.some(y=>y.w===x.w)));if(!words.some(x=>x.lv==='3'))words=words.concat(DEF().filter(x=>x.lv==='3'&&!words.some(y=>y.w===x.w)));const LN={'1':'初級','2':'中級','3':'高級','12':'初/中級','all':'全部'};const pool=()=>{const p=LV==='all'?words:LV==='12'?words.filter(x=>x.lv==='1'||x.lv==='2'):words.filter(x=>x.lv===LV);return p.length>=4?p:words};
+const save=()=>{S.set('wrong',wrong);S.set('stat2',stat)};
 let AUTO=S.get('auto',true),RATE=S.get('rate',.8);const spk=()=>cur.key[0]==='g'?GR[+cur.key.slice(2)][0].replace('___',cur.ans):cur.key.split('|')[1];const say=t=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=RATE;speechSynthesis.speak(u)}catch(e){}};
 function mk(key,retry){const [t,r]=key.split('|');
  if(t==='g'){const g=GR[+r];const T=GT[+r]||['',g[3]],a=g[1][g[2]];return{key,label:'文法',prompt:g[0],tr:T[0],opts:shuffle(g[1]),ans:a,exp:`完整句子:${g[0].replace('___',a)}\n中文翻譯:${T[0]}\n\n💡 ${T[1]}`,retry}}
@@ -186,13 +191,13 @@ function mk(key,retry){const [t,r]=key.split('|');
 const lbl=k=>{const[t,r]=k.split('|');if(t==='g')return GR[+r][0];const w=words.find(x=>x.w===r);return w?`${w.w} — ${w.m}`:r};
 const TN={listen:'聽力',read:'閱讀',write:'寫作',g:'文法'};
 const MODES={mix:'🎲 混合測驗(聽・讀・寫・文法)',listen:'👂 聽力',read:'📖 閱讀',write:'✍️ 寫作/聽寫',gram:'📐 基礎文法',wrong:'🔁 錯題加強'};
-function home(){Q=null;const wk=Object.keys(wrong),acc=stat.t?Math.round(stat.c/stat.t*100):0;
- $('#app').innerHTML=`<h1>📚 英語小教室</h1><div class="card"><div class="row"><span>累計作答 <b>${stat.t}</b> 題</span><span>正確率 <b>${acc}%</b></span><span>單字庫 <b>${pool().length}</b></span></div><div class="bar" style="margin-top:8px"><i style="width:${acc}%"></i></div></div>
+function home(){Q=null;const wk=Object.keys(wrong),sg=k=>stat[k]||{t:0,c:0},pc=k=>sg(k).t?Math.round(sg(k).c/sg(k).t*100):0,cs=sg(LV),acc=pc(LV);
+ $('#app').innerHTML=`<h1>📚 英語小教室</h1><div class="card"><div class="scope">${LN[LV]}・學習紀錄</div><div class="row"><span>累計作答 <b>${cs.t}</b> 題</span><span>正確率 <b>${acc}%</b></span><span>單字庫 <b>${pool().length}</b></span></div><div class="bar" style="margin-top:8px"><i style="width:${acc}%"></i></div><div class="lvs">${Object.keys(LN).map(k=>`<div class="${k===LV?'on':''}"><span>${LN[k]}</span><span>${sg(k).t} 題</span><span>${sg(k).t?pc(k)+'%':'—'}</span></div>`).join('')}</div></div>
  <div class="seg">${[['1','初級'],['2','中級'],['3','高級'],['12','初/中級'],['all','全部']].map(([v,t])=>`<button data-a="lv" data-v="${v}" class="${LV===v?'on':''}">${t}<span>${v==='all'?words.length:v==='12'?words.filter(x=>x.lv==='1'||x.lv==='2').length:words.filter(x=>x.lv===v).length}</span></button>`).join('')}</div><button data-a="rate" style="margin:0 8px 8px 0">🐢 語速:${Math.round(RATE*100)}%</button><button data-a="auto" style="margin-bottom:8px">${AUTO?'🔊 自動發音:開':'🔇 自動發音:關'}</button><div class="grid">${Object.entries(MODES).map(([k,v])=>`<button data-a="start" data-m="${k}" ${k==='wrong'?'style="grid-column:1/3"':''}>${v}${k==='wrong'?`<span class="mu"> ・目前 ${wk.length} 題</span>`:''}</button>`).join('')}</div>
  <p class="mu">答錯的題目會在本回合稍後再次出現;錯題在「錯題加強」中連續答對 2 次才會移出錯題本。</p>
  <div class="card"><details><summary>📐 基礎文法重點</summary>${LES2}</details>
  <details><summary>📝 錯題本(${wk.length})</summary>${wk.length?wk.map(k=>`<div class="row" style="border-bottom:1px solid var(--bd);padding:6px 0"><span>${k[0]==='g'?'':`<button data-a="sayw" data-w="${esc(k.split('|')[1])}" style="padding:2px 8px">🔊</button> `}${esc(lbl(k))}</span><span class="mu">錯 ${wrong[k].n} 次</span></div>`).join('')+'<button data-a="clear" style="margin-top:8px">清空錯題本</button>':'<p class="mu">目前沒有錯題 🎉</p>'}</details>
- <details><summary>⚙️ 匯入完整單字表</summary><p class="mu">貼上單字表(支援「編號/單字/中文」逐行格式,或每行「單字|中文」),即可用全部單字練習。</p><textarea id="imp" rows="6"></textarea><div class="grid" style="margin-top:8px"><button class="p" data-a="imp">匯入</button><button data-a="reset">還原內建</button></div><p id="impmsg" class="mu"></p></details></div>`}
+ <details><summary>⚙️ 匯入完整單字表</summary><p class="mu">貼上單字表(支援「編號/單字/中文」逐行格式,或每行「單字|中文」),即可用全部單字練習。</p><textarea id="imp" rows="6"></textarea><div class="grid" style="margin-top:8px"><button class="p" data-a="imp">匯入</button><button data-a="reset">還原內建</button></div><p id="impmsg" class="mu"></p></details><details><summary>🗑 清空紀錄</summary><p class="mu">「清空目前級別」只會清除上方所選級別的作答次數和正確率。「清空全部」會同時清除所有級別紀錄和錯題本。</p><div class="grid"><button data-a="clearstat">清空目前級別</button><button data-a="clearall">清空全部</button></div></details></div>`}
 function start(m){let keys=[];const W=()=>shuffle(pool()).slice(0,10).map(w=>w.w);
  if(m==='mix')for(let i=0;i<10;i++){const t=['listen','read','write','g'][Math.random()*4|0];keys.push(t==='g'?'g|'+(Math.random()*GR.length|0):t+'|'+pool()[Math.random()*pool().length|0].w)}
  else if(m==='gram')keys=shuffle(GR.map((_,i)=>'g|'+i)).slice(0,10);
@@ -206,7 +211,7 @@ function next(){if(!Q.q.length)return done();cur=mk(Q.q.shift());if(!cur)return 
  ${cur.write?`<p class="mu">提示:${esc(cur.hint)}</p><input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="輸入英文"><button class="p opt" data-a="submit">送出</button>`:cur.opts.map(o=>`<div style="display:flex;gap:6px;margin-top:8px"><button class="opt" style="margin:0;flex:1" data-a="opt" data-v="${esc(o)}">${esc(o)}</button>${/^[A-Za-z]/.test(o)?`<button data-a="sayv" data-v="${esc(o)}" title="聽發音">🔊</button>`:''}</div>`).join('')}<div id="fb"></div></div>`;
  if(cur.say&&(AUTO||cur.key[0]==='l'||cur.write))say(cur.say);const a=$('#ans');if(a)a.focus()}
 function answer(v){if(answered)return;answered=true;const ok=v.trim().toLowerCase()===cur.ans.toLowerCase();
- if(!cur.retry){stat.t++;if(ok){stat.c++;Q.right++}else Q.miss.push(cur.key)}
+ if(!cur.retry){const s=stat[LV]=stat[LV]||{t:0,c:0};s.t++;if(ok){s.c++;Q.right++}else Q.miss.push(cur.key)}
  const w=wrong[cur.key];
  if(ok&&w){w.s=(w.s||0)+1;if(w.s>=2)delete wrong[cur.key]}
  if(!ok){wrong[cur.key]={n:(w?w.n:0)+1,s:0};if(!cur.retry||(cur.tries||0)<2){Q.q.splice(Math.min(2,Q.q.length),0,cur.key)}}
@@ -220,7 +225,7 @@ function done(){const p=Math.round(Q.right/Q.total*100),ms=[...new Set(Q.miss)];
  <div class="grid"><button class="p" data-a="start" data-m="${Q.m}">再來一回</button><button data-a="start" data-m="wrong">🔁 錯題加強</button><button data-a="home" style="grid-column:1/3;text-align:center">回首頁</button></div>`}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
  if(a==='start')start(b.dataset.m);else if(a==='opt')answer(b.dataset.v);else if(a==='submit')answer($('#ans').value);
- else if(a==='next')next();else if(a==='home')home();else if(a==='say')say(cur.say);else if(a==='say2')say(spk());else if(a==='sayv')say(b.dataset.v);else if(a==='sayw')say(b.dataset.w);else if(a==='lv'){LV=b.dataset.v;S.set('lv',LV);home()}else if(a==='rate'){RATE=RATE<.7?.8:RATE<.9?1:.6;S.set('rate',RATE);b.textContent='🐢 語速:'+Math.round(RATE*100)+'%';say('Hello, nice to meet you')}else if(a==='auto'){AUTO=!AUTO;S.set('auto',AUTO);b.textContent=AUTO?'🔊 自動發音:開':'🔇 自動發音:關'}
+ else if(a==='next')next();else if(a==='home')home();else if(a==='say')say(cur.say);else if(a==='say2')say(spk());else if(a==='sayv')say(b.dataset.v);else if(a==='sayw')say(b.dataset.w);else if(a==='clearstat'){if(confirm('確定清空「'+LN[LV]+'」的作答紀錄?')){delete stat[LV];save();home()}}else if(a==='clearall'){if(confirm('確定清空所有級別的作答紀錄與錯題本?此動作無法復原。')){stat={};wrong={};save();home()}}else if(a==='lv'){LV=b.dataset.v;S.set('lv',LV);home()}else if(a==='rate'){RATE=RATE<.7?.8:RATE<.9?1:.6;S.set('rate',RATE);b.textContent='🐢 語速:'+Math.round(RATE*100)+'%';say('Hello, nice to meet you')}else if(a==='auto'){AUTO=!AUTO;S.set('auto',AUTO);b.textContent=AUTO?'🔊 自動發音:開':'🔇 自動發音:關'}
  else if(a==='clear'){if(confirm('確定清空錯題本?')){wrong={};save();home()}}
  else if(a==='imp'){const r=parse($('#imp').value);if(r.length<10){$('#impmsg').textContent='解析失敗或單字少於 10 個,請檢查格式。';return}const L=LV==='2'||LV==='3'?LV:'1';r.forEach(x=>x.lv=L);words=words.filter(x=>x.lv!==L).concat(r);S.set('words',words);wrong={};save();home()}
  else if(a==='reset'){words=DEF();try{localStorage.removeItem('words')}catch(e){}wrong={};save();home()}});
